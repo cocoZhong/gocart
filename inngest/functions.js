@@ -5,14 +5,13 @@ import { inngest } from "./client";
 export const syncUserCreation = inngest.createFunction(
     { id: "sync-user-create" },
     { event: "clerk/user.created" },
-    async ({ event, step }) => {
+    async ({ event }) => {
         const { data } = event;
-
         await prisma.user.create({
             data: {
                 id: data.id,
-                name: `${data.firstName} ${data.lastName}}`,
-                email: data.emailAddresses[0].emailAddress,
+                name: `${data.first_name} ${data.last_name}}`,
+                email: data.email_addresses[0].email_address,
                 image: data.image_url,
             },
         });
