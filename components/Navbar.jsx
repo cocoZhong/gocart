@@ -1,10 +1,10 @@
 "use client";
-import { Search, ShoppingCart, PackageIcon } from "lucide-react";
+import { Search, ShoppingCart, Package } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useClerk, useUser, UserButton } from "@clerk/nextjs";
+import { useClerk, useUser, UserButton, Protect } from "@clerk/nextjs";
 const Navbar = () => {
     const router = useRouter();
     const { user } = useUser();
@@ -29,9 +29,11 @@ const Navbar = () => {
                         <span className="text-green-600 text-5xl leading-0">
                             .
                         </span>
-                        <p className="absolute text-xs font-semibold -top-1 -right-8 px-3 p-0.5 rounded-full flex items-center gap-2 text-white bg-green-500">
-                            plus
-                        </p>
+                        <Protect plan="plus">
+                            <p className="absolute text-xs font-semibold -top-1 -right-8 px-3 p-0.5 rounded-full flex items-center gap-2 text-white bg-green-500">
+                                plus
+                            </p>
+                        </Protect>
                     </Link>
 
                     {/* Desktop Menu */}
@@ -77,10 +79,19 @@ const Navbar = () => {
                         ) : (
                             <UserButton>
                                 <UserButton.MenuItems>
+                                    {cartCount !== 0 && (
+                                        <UserButton.Action
+                                            label="Cart"
+                                            labelIcon={
+                                                <ShoppingCart size={16} />
+                                            }
+                                            onClick={() => router.push("/cart")}
+                                        ></UserButton.Action>
+                                    )}
                                     <UserButton.Action
-                                        label="Cart"
-                                        labelIcon={<ShoppingCart size={16} />}
-                                        onClick={() => router.push("/cart")}
+                                        label="My Orders"
+                                        labelIcon={<Package size={16} />}
+                                        onClick={() => router.push("/orders")}
                                     ></UserButton.Action>
                                 </UserButton.MenuItems>
                             </UserButton>
@@ -99,16 +110,18 @@ const Navbar = () => {
                         ) : (
                             <UserButton>
                                 <UserButton.MenuItems>
-                                    <UserButton.Action
-                                        label="Cart"
-                                        labelIcon={<ShoppingCart size={16} />}
-                                        onClick={() => router.push("/cart")}
-                                    ></UserButton.Action>
-                                </UserButton.MenuItems>
-                                <UserButton.MenuItems>
+                                    {cartCount !== 0 && (
+                                        <UserButton.Action
+                                            label="Cart"
+                                            labelIcon={
+                                                <ShoppingCart size={16} />
+                                            }
+                                            onClick={() => router.push("/cart")}
+                                        ></UserButton.Action>
+                                    )}
                                     <UserButton.Action
                                         label="My Orders"
-                                        labelIcon={<PackageIcon size={16} />}
+                                        labelIcon={<Package size={16} />}
                                         onClick={() => router.push("/orders")}
                                     ></UserButton.Action>
                                 </UserButton.MenuItems>

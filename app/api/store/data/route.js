@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 // get store info and store product
-export const POST = async (req) => {
+export const GET = async (req) => {
     try {
         // get store username from params
         const { searchParams } = new URL(req.url);

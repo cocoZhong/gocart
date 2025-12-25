@@ -33,7 +33,7 @@ export const POST = async (req) => {
             images.map(async (image) => {
                 const buffer = Buffer.from(await image.arrayBuffer());
                 const response = await imageKit.files.upload({
-                    file: buffer,
+                    file: await toFile(buffer, "file"),
                     fileName: image.name,
                     folder: "products",
                 });
