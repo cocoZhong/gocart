@@ -6,7 +6,7 @@ export const POST = async (req) => {
         const body = await req.text();
         const sig = req.headers.get("stripe-signature");
         const event = stripe.webhooks.constructEvent(
-            req.body,
+            body,
             sig,
             process.env.STRIPE_WEBHOOK_SECRET
         );
@@ -14,7 +14,7 @@ export const POST = async (req) => {
             const session = await stripe.checkout.sessions.list({
                 payment_intent: paymentIntentId,
             });
-            const { orderId, userId, appId } = session.data[0].metadata;
+            const { orderIds, userId, appId } = session.data[0].metadata;
             if (appId !== "gocart")
                 return NextResponse.json({
                     received: true,
